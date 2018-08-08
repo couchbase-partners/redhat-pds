@@ -1,0 +1,55 @@
+apiVersion: couchbase.database.couchbase.com/v1
+kind: CouchbaseCluster
+metadata:
+  name: cb-example
+spec:
+  baseImage: couchbase/server
+  version: enterprise-5.5.0 # Updated to valid tag
+  authSecret: cb-example-auth
+  exposeAdminConsole: true
+  exposedFeatures:
+      - xdcr
+  serverGroups:
+    - ServerGroup1
+    - ServerGroup2
+    - ServerGroup3
+  servers:
+    - name: DataServer
+      services:
+        - data
+      size: 6
+      serverGroups:
+        - ServerGroup1
+        - ServerGroup2   
+        - ServerGroup3      
+    - name: QueryServer
+      services:
+        - query
+      serverGroups:
+        - ServerGroup1
+        - ServerGroup2
+        - ServerGroup3
+      size: 3      
+  cluster:
+    dataServiceMemoryQuota: 256
+    indexServiceMemoryQuota: 256
+    searchServiceMemoryQuota: 256
+    analyticsServiceMemoryQuota: 1024
+    eventingServiceMemoryQuota: 256
+    indexStorageSetting: memory_optimized
+    autoFailoverTimeout: 10
+    autoFailoverMaxCount: 3
+    autoFailoverOnDataDiskIssues: true
+    autoFailoverOnDataDiskIssuesTimePeriod: 120
+    autoFailoverServerGroup: false
+  buckets:
+    - name: default
+      type: couchbase
+      memoryQuota: 128
+      replicas: 2
+      ioPriority: high
+      evictionPolicy: fullEviction
+      conflictResolution: seqno
+      enableFlush: true
+      enableIndexReplica: false
+
