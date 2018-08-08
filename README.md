@@ -10,7 +10,7 @@ Related resources:
 
 ## Summary 
 
-This is a guide for running the customer
+This is a guide for running the Couchbase Operator demo on Red Hat OpenShift - [Partner Demo System](https://www.redhat.com/en/partners/rhpds)
 
 ### Pre-requisites
 
