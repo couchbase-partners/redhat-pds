@@ -57,7 +57,7 @@ These commands are for deploying the entire demo from scratch on a 3 node PDS cl
 ```
 oc login https://<PDS env ID>.srv.ravcloud.com:8443
 
-oc new-project couchbase-operator
+oc new-project operator-example
 ```
 
 ### Deploy the Opertor CRD
@@ -97,6 +97,15 @@ oc get pods
 NAME                                  READY     STATUS    RESTARTS   AGE
 couchbase-operator-5bc785c54f-kh6c2   1/1       Running   0          22s
 ```
+
+### Deploy Couchbase Credentials
+
+The clusters we will create leverage the credentials provided in this secret.
+
+```
+oc create -f secret.yaml
+```
+
 
 ### Deploy a Basic Couchbase Cluster
 
