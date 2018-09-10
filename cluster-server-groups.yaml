@@ -12,24 +12,21 @@ spec:
   serverGroups:
     - ServerGroup1
     - ServerGroup2
-    - ServerGroup3
   servers:
     - name: DataServer
       services:
         - data
-      size: 6
+      size: 2
       serverGroups:
         - ServerGroup1
         - ServerGroup2   
-        - ServerGroup3      
     - name: QueryServer
       services:
         - query
       serverGroups:
         - ServerGroup1
         - ServerGroup2
-        - ServerGroup3
-      size: 3      
+      size: 2
   cluster:
     dataServiceMemoryQuota: 256
     indexServiceMemoryQuota: 256
@@ -46,7 +43,7 @@ spec:
     - name: default
       type: couchbase
       memoryQuota: 128
-      replicas: 2
+      replicas: 1
       ioPriority: high
       evictionPolicy: fullEviction
       conflictResolution: seqno

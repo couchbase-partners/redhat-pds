@@ -52,11 +52,24 @@ All yaml in this directory was initially pulled from https://packages.couchbase.
 
 These commands are for deploying the entire demo from scratch on a 3 node PDS cluster.
 
+### Open Shift UI Login
+
+https://master.couchbase.openshiftworkshop.com/login
+
+- 2 Accounts
+    - developer: user1 / openshift
+    - admin: opentlc-mgr / r3dh4t1!
 
 ### Login and Create Project
-```
-oc login https://<PDS env ID>.srv.ravcloud.com:8443
 
+```
+oc login https://master.couchbase.openshiftworkshop.com
+```
+Login as admin from command line:
+
+opentlc-mgr / r3dh4t1!
+
+```
 oc new-project operator-example
 ```
 
@@ -170,9 +183,10 @@ Show the Couchbase server list page while this happens.
 First, we need to add labels to our OpenShift nodes. Labels are used to tell the Operator which zone a particular node belongs to. In this example, we'll simulate each node beloning to a separate zone (hence each node gets it's own ServerGroup label)
 
 ```
- oc label --overwrite nodes node01.example.com server-group.couchbase.com/zone=ServerGroup1
- oc label --overwrite nodes node02.example.com server-group.couchbase.com/zone=ServerGroup2
- oc label --overwrite nodes node03.example.com server-group.couchbase.com/zone=ServerGroup3
+ oc label --overwrite nodes node1.couchbase.internal server-group.couchbase.com/zone=ServerGroup1
+ oc label --overwrite nodes node2.couchbase.internal server-group.couchbase.com/zone=ServerGroup1
+ oc label --overwrite nodes node3.couchbase.internal server-group.couchbase.com/zone=ServerGroup2
+ oc label --overwrite nodes node4.couchbase.internal server-group.couchbase.com/zone=ServerGroup2
 ```
 
 Now, delete the existing Couchbase cluster:
