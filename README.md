@@ -56,11 +56,11 @@ These commands are for deploying the entire demo from scratch on a 3 node PDS cl
 
 https://master.couchbase.openshiftworkshop.com/login
 
+### Login and Create Project
+
 - 2 Accounts
     - developer: user1 / openshift
     - admin: opentlc-mgr / r3dh4t1!
-
-### Login and Create Project
 
 ```
 oc login https://master.couchbase.openshiftworkshop.com
