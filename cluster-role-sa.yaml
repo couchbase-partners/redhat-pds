@@ -1,11 +1,10 @@
----
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: couchbase-operator
 rules:
 - apiGroups:
-  - couchbase.database.couchbase.com
+  - couchbase.com
   resources:
   - couchbaseclusters
   verbs:
@@ -29,7 +28,6 @@ rules:
   - services
   - endpoints
   - persistentvolumeclaims
-  - persistentvolumes  
   - events
   - secrets
   verbs:
@@ -38,10 +36,9 @@ rules:
   - ""
   resources:
   - persistentvolumes
-  - persistentvolumeclaims  
   verbs:
   - "get"
-  - "watch" 
+  - "watch"
 - apiGroups:
   - apps
   resources:

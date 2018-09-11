@@ -4,46 +4,8 @@ metadata:
   name: couchbasecluster
 rules:
 - apiGroups:
-  - couchbase.database.couchbase.com
+  - couchbase.com
   resources:
   - couchbaseclusters
   verbs:
   - "*"
-- apiGroups:
-  - storage.k8s.io
-  resources:
-  - storageclasses
-  verbs:
-  - "get"
-- apiGroups:
-  - apiextensions.k8s.io
-  resources:
-  - customresourcedefinitions
-  verbs:
-  - "*"
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  - services
-  - endpoints
-  - persistentvolumeclaims
-  - events
-  - secrets
-  verbs:
-  - "*"
-- apiGroups:
-  - ""
-  resources:
-  - persistentvolumes
-  - persistentvolumeclaims  
-  verbs:
-  - "get"
-  - "watch" 
-- apiGroups:
-  - apps
-  resources:
-  - deployments
-  verbs:
-  - "*"
-

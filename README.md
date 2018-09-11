@@ -73,6 +73,15 @@ opentlc-mgr / r3dh4t1!
 oc new-project operator-example
 ```
 
+## Create Red Hat Registry Secrets
+
+```
+oc create secret docker-registry rh-catalog --docker-server=registry.connect.redhat.com --docker-username=USERNAME --docker-password=PASSWORD --docker-email=EMAIL
+
+oc secrets add serviceaccount/couchbase-operator secrets/rh-catalog --for=pull
+oc secrets add serviceaccount/default secrets/rh-catalog --for=pull
+```
+
 ### Deploy the Opertor CRD
 
 ```
