@@ -6,83 +6,48 @@ The Couchbase Operator allows users to deploy Couchbase on OpenShift while signi
 
 Related resources:
 
-- **TODO:** insert the most relevant docs and blog links
+- [Autonomous Operator Overview](https://docs.couchbase.com/operator/1.0/overview.html)
+- [Installing on OpenShift](https://docs.couchbase.com/operator/1.0/install-openshift.html)
+- TODO: insert link to RHPDS setup steps.
 
 ## Summary 
 
-This is a guide for running the Couchbase Operator demo on Red Hat OpenShift - [Partner Demo System](https://www.redhat.com/en/partners/rhpds)
+This guide is intended to be run with with Red Hat's [Partner Demo System](https://www.redhat.com/en/partners/rhpds) for demos and workshops. It provides steps and examples for deploying Couchbase clusters using the Autonomous operator.
 
-### Pre-requisites
+# Setup
 
-- Admin access to the PDS environment (required to install [CRDs](https://blog.openshift.com/kubernetes-custom-resources-grow-up-in-v1-10/))
+### Login to RH PDS Open Shift
 
+The first step is to login to Open Shift in your local browser AND terminal.
 
-### High Level Demo Steps
+Open https://master.couchbase.openshiftworkshop.com/login in your browser and login with **user1**'s credentials:
 
-*oc cli = OpenShift Command Line (oc), oc ui = OpenShift UI, cb ui = Couchbase UI*
-
-
-- **Operator and Cluster Deployment**
-	- oc cli: Login to OpenShift (as admin) 
-	- oc cli: Deploy the Couchbase Operator CRD 
-	- oc cli: Create service accounts, roles, bindings
-	- oc cli: Deploy the Couchbase Operator
-	- oc cli: Deploy a Couchbase Cluster
-	- cb ui: Expose a route to the Couchbase Cluster and login to Couchbase UI
-- **Failover and Rebalance**
-	- oc ui: Login to OpenShift UI
-	- cb ui: Load some data into default bucket (TBD)
-	    - Show bucket contents
-	- oc ui: Delete some pods
-   - oc ui: Show pods disappearing and new ones being created
-   - cb ui: Show Couchbase failing over, recovering with new node and rebalancing.
-- **Server Groups**
-	- Delete the basic Couchbase cluster (cluster only, keep operator)
-    - Add labels to the OpenShift nodes (required to support server groups)
-	- Deploy the Couchbase cluster w/ Server Groups enabled
-- **PersistentVolumes**
-    - TBD
-- **Cross-data Center Replication "Lift & Shift"**
-    - TBD
+- username: user1
+- password: openshift
 
 
-## PDS Operator Demo Commands
-
-All yaml in this directory was initially pulled from https://packages.couchbase.com/kubernetes/0.9.0-beta3/openshift/*.yaml
-
-These commands are for deploying the entire demo from scratch on a 3 node PDS cluster.
-
-### Open Shift UI Login
-
-https://master.couchbase.openshiftworkshop.com/login
-
-### Login and Create Project
-
-- 2 Accounts
-    - developer: user1 / openshift
-    - admin: opentlc-mgr / r3dh4t1!
+Now we will login via terminal using **opentlc-mgr**'s credentials:
 
 ```
 oc login https://master.couchbase.openshiftworkshop.com
 ```
-Login as admin from command line:
 
-opentlc-mgr / r3dh4t1!
+- username: opentlc-mgr
+- password: r3dh4t1!
+
+> Note: opentlc-mgr is an admin account. Admin privileges are needed in order to install Custom Resource Definitions (CRDs).
+
+### Create Project
+
+Next, we need to create a project to work in. 
 
 ```
 oc new-project operator-example
 ```
 
-## Create Red Hat Registry Secrets
+This command creates the `operator-example` project and switches to it.
 
-```
-oc create secret docker-registry rh-catalog --docker-server=registry.connect.redhat.com --docker-username=USERNAME --docker-password=PASSWORD --docker-email=EMAIL
-
-oc secrets add serviceaccount/couchbase-operator secrets/rh-catalog --for=pull
-oc secrets add serviceaccount/default secrets/rh-catalog --for=pull
-```
-
-### Deploy the Opertor CRD
+### Deploy the Operator CRD
 
 ```
 oc create -f crd.yaml
@@ -106,6 +71,19 @@ oc create clusterrolebinding couchbasecluster --clusterrole couchbasecluster --u
 
 ```
 
+### Create Red Hat Registry Secrets
+
+Before we can deploy the operator we need to specify credentials for pulling container images from Red Hat's registry and add them to the service accounts.
+
+Replace USERNAME and PASSWORD and EMAIL below with your Red Hat account info.
+
+```
+oc create secret docker-registry rh-catalog --docker-server=registry.connect.redhat.com --docker-username=redcouch --docker-password=openshift --docker-email=redcouchredhat@gmail.com
+
+oc secrets add serviceaccount/couchbase-operator secrets/rh-catalog --for=pull
+oc secrets add serviceaccount/default secrets/rh-catalog --for=pull
+```
+
 ### Deploy the Operator
 
 ```
@@ -120,18 +98,21 @@ NAME                                  READY     STATUS    RESTARTS   AGE
 couchbase-operator-5bc785c54f-kh6c2   1/1       Running   0          22s
 ```
 
-### Deploy Couchbase Credentials
+**Do not proceed** to the next step until you see the `couchbase-operator` pod has status `RUNNING`.
 
-The clusters we will create leverage the credentials provided in this secret.
+### Deploy Couchbase Credentials Secret
+
+The Couchbase clusters deployed in the following steps will use the credentials provided in the `cb-example-auth` secret. Deplying `secret.yaml` will create the secret.
 
 ```
 oc create -f secret.yaml
 ```
 
+# Cluster Recipes
 
 ### Deploy a Basic Couchbase Cluster
 
-The first cluster that we'll deploy will be a simple, 3 node cluster
+The first cluster that we'll deploy will be a simple, 4 node cluster, with one bucket and 2 replicas.
 
 ```
 oc create -f cluster.yaml
@@ -145,6 +126,7 @@ NAME                                  READY     STATUS    RESTARTS   AGE
 cb-example-0000                       1/1       Running   0          3m
 cb-example-0001                       1/1       Running   0          3m
 cb-example-0002                       1/1       Running   0          2m
+cb-example-0003                       1/1       Running   0          2m
 couchbase-operator-5bc785c54f-kh6c2   1/1       Running   0          7m
 ```
 
@@ -160,36 +142,55 @@ Get the route to the Couchbase UI:
 
 ```
 oc get routes
-NAME            HOST/PORT                                               PATH      SERVICES        PORT        TERMINATION   WILDCARD
-cb-example-ui   cb-example-ui-operator-example.xxx.xxx.xxx.xxx.xip.io             cb-example-ui   couchbase                 None
+NAME            HOST/PORT                                                             PATH      SERVICES        PORT        TERMINATION   WILDCARD
+cb-example-ui   cb-example-ui-operator-example.apps.couchbase.openshiftworkshop.com             cb-example-ui   couchbase                 None
 ``` 
 
-Open the URL outputted by `oc get routes` in your browser and login with "Administrator/password". Navigate to "Servers" to see the server list.
+Open the URL outputted by `oc get routes` in your browser and login with "Administrator/password". Navigate to "Servers" to see the server list:
 
-You should see this:
+![Basic Couchbase Cluster](img/cb-cluster-basic.png)
 
-![dsa](img/3node-server-list.png)
+On the Pods page in OpenShift (https://master.couchbase.openshiftworkshop.com/console/project/operator-example/browse/pods):
 
-### Load Data
-
-**TODOD**
-
+![](img/os-cluster-basic.png)
 
 ### Failover Demo
 
 Now that we have a cluster up and some data, we can demonstrate the operator in action. 
 
-First, delete one of the pods
+First, delete one of the pods:
 
 ```
-oc delete pod cb-example-0002
+oc delete pod cb-example-0003
 ```
 
-Show the Couchbase server list page while this happens.
+By deleting the pod, we are destroying one of the Couchbase nodes. At this point the operator should take over and try to recover the cluster to our desired state.
 
-### Server Groups Demo
+Couchbase recognizes that a node is missing and triggers fail-over:
 
-First, we need to add labels to our OpenShift nodes. Labels are used to tell the Operator which zone a particular node belongs to. In this example, we'll simulate each node beloning to a separate zone (hence each node gets it's own ServerGroup label)
+![](img/failover-1.png)
+
+Couchbase recognizes the new node coming online and begins rebalancing:
+
+![](img/failover-2.png)
+
+The rebalance conintues until the cluster is fully healed.
+
+![](img/failover-3.png)
+
+### Cleanup
+
+Delete the cluster before moving onto the next example:
+
+```
+oc delete -f cluster-basic.yaml
+
+```
+
+
+## Deploy a Cluster with Server Groups Enabled
+
+First, we need to add labels to our OpenShift nodes. Labels are used to tell the Operator which zone a particular node belongs to. In this example, we'll declare the node1 and node2 belong to ServerGroup1 and node2 and node3 belong to ServerGroup2.
 
 ```
  oc label --overwrite nodes node1.couchbase.internal server-group.couchbase.com/zone=ServerGroup1
@@ -198,19 +199,7 @@ First, we need to add labels to our OpenShift nodes. Labels are used to tell the
  oc label --overwrite nodes node4.couchbase.internal server-group.couchbase.com/zone=ServerGroup2
 ```
 
-Now, delete the existing Couchbase cluster:
-
-```
-oc delete -f cluster.yaml
-```
-
-Also, clean up the route we exposed earlier:
-
-```
-oc delete route cb-example-ui
-```
-
-Run `oc get pods` to make sure all of the pods have been destroyed. Now deploy the new cluster:
+Now deploy the new cluster:
 
 ```
 oc create -f cluster-server-groups.yaml
@@ -219,3 +208,6 @@ oc create -f cluster-server-groups.yaml
 This deploys a 9 node cluster with ServerGroups enabled. The distribution of nodes is setup so that each zone has 2 Data nodes and 1 Query node. This allows us to keep 2 replicas of the defauly bucket in each zone.
 
 ![](img/9node-server-list.png)
+
+# Deploy an Application
+
