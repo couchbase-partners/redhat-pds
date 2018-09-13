@@ -83,6 +83,7 @@ oc create secret docker-registry rh-catalog --docker-server=registry.connect.red
 oc secrets add serviceaccount/couchbase-operator secrets/rh-catalog --for=pull
 oc secrets add serviceaccount/default secrets/rh-catalog --for=pull
 ```
+> Note the image will be pulled from the registry into you local repository. This can take a few minutes. 
 
 ### Deploy the Operator
 
@@ -117,7 +118,7 @@ oc create -f secret.yaml
 The first cluster that we'll deploy will be a simple, 4 node cluster, with one bucket and 2 replicas.
 
 ```
-oc create -f cluster.yaml
+oc create -f cluster-basic.yaml
 ```
 
 You should start seeing Couchbase pods appearing immediately. It will take a couple of minutes for the cluster to be ready.
