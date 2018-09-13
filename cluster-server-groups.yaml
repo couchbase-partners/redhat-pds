@@ -1,10 +1,10 @@
-apiVersion: couchbase.database.couchbase.com/v1
+apiVersion: couchbase.com/v1
 kind: CouchbaseCluster
 metadata:
   name: cb-example
 spec:
-  baseImage: couchbase/server
-  version: enterprise-5.5.0 # Updated to valid tag
+  baseImage: registry.connect.redhat.com/couchbase/server
+  version: 5.5.1-1
   authSecret: cb-example-auth
   exposeAdminConsole: true
   exposedFeatures:
@@ -49,4 +49,3 @@ spec:
       conflictResolution: seqno
       enableFlush: true
       enableIndexReplica: false
-
