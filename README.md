@@ -150,7 +150,11 @@ NAME            HOST/PORT                                                       
 cb-example-ui   cb-example-ui-operator-example.apps.couchbase.openshiftworkshop.com             cb-example-ui   couchbase                 None
 ```
 
-Open the URL outputted by `oc get routes` in your browser and login with "Administrator/password". Navigate to "Servers" to see the server list:
+Open the URL outputted by `oc get routes` in your browser and login with:
+> Username: Administrator
+> Password: password. 
+
+Navigate to "Servers" to see the server list:
 
 ![Basic Couchbase Cluster](img/cb-cluster-basic.png)
 
