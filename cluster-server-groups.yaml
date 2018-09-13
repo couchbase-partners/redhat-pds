@@ -4,7 +4,7 @@ metadata:
   name: cb-example
 spec:
   baseImage: registry.connect.redhat.com/couchbase/server
-  version: enterprise-5.5.0 # Updated to valid tag
+  version: 5.5.1-1
   authSecret: cb-example-auth
   exposeAdminConsole: true
   exposedFeatures:
