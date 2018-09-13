@@ -3,7 +3,7 @@ kind: CouchbaseCluster
 metadata:
   name: cb-example
 spec:
-  baseImage: couchbase/server
+  baseImage: registry.connect.redhat.com/couchbase/server
   version: enterprise-5.5.0 # Updated to valid tag
   authSecret: cb-example-auth
   exposeAdminConsole: true
