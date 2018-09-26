@@ -40,7 +40,7 @@ spec:
     autoFailoverOnDataDiskIssuesTimePeriod: 120
     autoFailoverServerGroup: false
   buckets:
-    - name: default
+    - name: tweets
       type: couchbase
       memoryQuota: 128
       replicas: 1
@@ -48,4 +48,4 @@ spec:
       evictionPolicy: fullEviction
       conflictResolution: seqno
       enableFlush: true
-      enableIndexReplica: false
+      enableIndexReplica: true

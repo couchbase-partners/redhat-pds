@@ -19,10 +19,10 @@ spec:
     autoFailoverTimeout: 10
     autoFailoverMaxCount: 3
     autoFailoverOnDataDiskIssues: true
-    autoFailoverOnDataDiskIssuesTimePeriod: 120
+    autoFailoverOnDataDiskIssuesTimePeriod: 30
     autoFailoverServerGroup: false
   buckets:
-    - name: default
+    - name: tweets
       type: couchbase
       memoryQuota: 128
       replicas: 2
@@ -30,7 +30,7 @@ spec:
       evictionPolicy: fullEviction
       conflictResolution: seqno
       enableFlush: true
-      enableIndexReplica: false
+      enableIndexReplica: true
   servers:
     - size: 4
       name: all_services
@@ -39,5 +39,5 @@ spec:
         - index
         - query
         - search
-        #- eventing
+        - eventing
         #- analytics

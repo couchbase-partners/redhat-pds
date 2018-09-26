@@ -162,6 +162,38 @@ On the Pods page in OpenShift (https://master.couchbase.openshiftworkshop.com/co
 
 ![](img/os-cluster-basic.png)
 
+
+### Build and Deploy an App
+
+In order to help demonstrate the Couchbase Autonomous Operator in action, we'll deploy an application that streams tweets in real-time from Twitter's APIs into Couchbase. In the next section, will intentionally kill a Couchbase node and observe how Couchbase and the app respond to this event.
+
+First, import the `openjdk18-openshift` [https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html-single/red_hat_java_s2i_for_openshift/index](S2I) image. S2I will allow us to containerize and deploy an application on OpenShift without having to worry about writing a Dockerfile nor any YAML files!
+
+```
+oc import-image registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift --confirm
+```
+
+After importing this image, let's deploy a Twitter the streaming application:
+
+```
+oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest~https://github.com/ezeev/cb-rh-twitter.git \
+       -e TWITTER_CONSUMER_KEY=YOUR_CONSUMER_KEY \
+       -e TWITTER_CONSUMER_SECRET=YOUR_CONSUMER_SECRET \
+       -e TWITTER_TOKEN=YOUR_TOKEN \
+       -e TWITTER_SECRET=YOUR_SECRET \
+       -e TWITTER_FILTER='#RegisterToVote' \
+       -e COUCHBASE_CLUSTER=cb-example \
+       -e COUCHBASE_USER=Administrator \
+       -e COUCHBASE_PASSWORD=password \
+       -e COUCHBASE_TWEET_BUCKET=tweets \
+       --context-dir=twitter-streamer \
+       --name=twitter-streamer
+```
+
+The [oc new-app](https://docs.openshift.com/enterprise/3.1/dev_guide/new_app.html) command specifies the image source, the source code repository and directory to build from, and a number of environment variables required by our app. You can watch the build with `oc logs -f bc/cb-rh-twitter`. When this is completed you should see a new pod created for the twitter streamer.
+
+At this point you should also see new documents appearing in the tweets bucket.
+
 ### Failover Demo
 
 Now that we have a cluster up with some data, we can demonstrate the operator in action.
