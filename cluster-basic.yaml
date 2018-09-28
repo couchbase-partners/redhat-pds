@@ -23,7 +23,7 @@ spec:
     autoFailoverServerGroup: false
   buckets:
     - name: tweets
-      type: couchbase
+      type: memcached
       memoryQuota: 128
       replicas: 2
       ioPriority: high
