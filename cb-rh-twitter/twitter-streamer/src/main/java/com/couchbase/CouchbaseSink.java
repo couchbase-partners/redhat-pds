@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 
 @Service
 public class CouchbaseSink implements TweetSink {
@@ -20,7 +24,8 @@ public class CouchbaseSink implements TweetSink {
 
     private Cluster cluster;
     private Bucket tweetBucket;
-
+    //2016-05-15T03:59:00Z
+    private java.text.SimpleDateFormat formatter = new SimpleDateFormat();
 
     @Value("#{environment['COUCHBASE_CLUSTER']}")
     private String couchbaseAddress;
@@ -71,10 +76,35 @@ public class CouchbaseSink implements TweetSink {
 
         JsonObject tweet = JsonObject.fromJson(msg);
         if (tweet.containsKey("id")) {
+            long epochSecs = Instant.now().getEpochSecond();
+            long epochMin = epochSecs / 60;
+            tweet.put("epoch_sec", epochSecs);
+            tweet.put("epoch_min", epochMin);
+            tweet.put("type","tweet");
+
             tweetBucket.upsert(JsonDocument.create(tweet.get("id").toString(), tweet));
+
+
+            // add hash tag document
+            JsonObject ents = (JsonObject)tweet.get("entities");
+            JsonArray hashtags = ents.getArray("hashtags");
+            for (Object hashtag : hashtags) {
+                String text = (((JsonObject)hashtag).get("text")).toString();
+
+                JsonObject hashTagDoc = JsonObject.create();
+                hashTagDoc.put("tag", text);
+                hashTagDoc.put("tweet_id", tweet.get("id").toString());
+                hashTagDoc.put("epoch_sec", epochSecs);
+                hashTagDoc.put("epoch_min", epochMin);
+                hashTagDoc.put("type","hashtag");
+                tweetBucket.upsert(JsonDocument.create(tweet.get("id") + "-" + text, hashTagDoc));
+            }
+
+
+
+
         }
     }
-
 
 
 

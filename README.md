@@ -176,7 +176,7 @@ oc import-image registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift
 After importing this image, let's deploy a Twitter the streaming application:
 
 ```
-oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest~https://github.com/ezeev/cb-rh-twitter.git \
+oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest~https://github.com/couchbase-partners/redhat-pds.git \
        -e TWITTER_CONSUMER_KEY=YOUR_CONSUMER_KEY \
        -e TWITTER_CONSUMER_SECRET=YOUR_CONSUMER_SECRET \
        -e TWITTER_TOKEN=YOUR_TOKEN \
@@ -186,7 +186,7 @@ oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:late
        -e COUCHBASE_USER=Administrator \
        -e COUCHBASE_PASSWORD=password \
        -e COUCHBASE_TWEET_BUCKET=tweets \
-       --context-dir=twitter-streamer \
+       --context-dir=cb-rh-twitter/twitter-streamer \
        --name=twitter-streamer
 ```
 

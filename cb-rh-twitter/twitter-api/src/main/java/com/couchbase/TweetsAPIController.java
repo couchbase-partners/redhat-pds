@@ -62,7 +62,7 @@ public class TweetsAPIController {
     public  List<Tweet> tweets() {
         //query
         N1qlQueryResult result = tweetBucket.query(
-                N1qlQuery.simple("select id, text, created_at from tweets order by created_at desc limit 10;")
+                N1qlQuery.simple("select id, text, created_at, epoch_min from tweets order by created_at desc limit 10;")
         );
 
         List<Tweet> resp = new ArrayList<>();
@@ -70,7 +70,8 @@ public class TweetsAPIController {
             Tweet tweet = new Tweet(
                     row.value().getLong("id"),
                     row.value().getString("text"),
-                    row.value().getString("created_at"));
+                    row.value().getString("created_at"),
+                    row.value().getLong("epoch_min"));
             resp.add(tweet);
         }
         return resp;
