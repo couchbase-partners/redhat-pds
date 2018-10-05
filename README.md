@@ -224,9 +224,15 @@ Delete the cluster before moving onto the next example:
 
 ```
 oc delete -f cluster-basic.yaml
-
 ```
 
+To remove the twitter streaming app:
+
+```
+oc delete dc twitter-streamer
+oc delete bc twitter-streamer
+oc delete svc twitter-streamer
+```
 
 ## Deploy a Cluster with Server Groups Enabled
 
