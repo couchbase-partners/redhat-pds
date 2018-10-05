@@ -1,23 +1,22 @@
 package com.couchbase;
 
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.CouchbaseCluster;
+import com.couchbase.client.java.query.N1qlQuery;
+import com.couchbase.client.java.query.N1qlQueryResult;
+import com.couchbase.client.java.query.N1qlQueryRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.couchbase.client.java.*;
-import com.couchbase.client.java.document.*;
-import com.couchbase.client.java.document.json.*;
-import com.couchbase.client.java.query.*;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
-public class TweetsAPIController {
-
+public class HashTagCountsAPIController {
 
     @Value("#{environment['COUCHBASE_CLUSTER']}")
     private String couchbaseAddress;
@@ -31,14 +30,10 @@ public class TweetsAPIController {
     @Value("#{environment['COUCHBASE_TWEET_BUCKET']}")
     private String bucketName;
 
-    private static final Logger log = LoggerFactory.getLogger(TweetsAPIController.class);
+    private static final Logger log = LoggerFactory.getLogger(HashTagCountsAPIController.class);
 
     private CouchbaseCluster cluster;
     private Bucket tweetBucket;
-
-
-    public TweetsAPIController() {
-    }
 
     @PostConstruct
     public void init() {
@@ -56,27 +51,19 @@ public class TweetsAPIController {
         tweetBucket.bucketManager().createN1qlPrimaryIndex(true, false);
     }
 
-
     @CrossOrigin(origins = "*")
-    @RequestMapping("/tweets")
-    public  List<Tweet> tweets() {
+    @RequestMapping("/hashtags")
+    public Map<String, Integer> tweets() {
         //query
         N1qlQueryResult result = tweetBucket.query(
-                N1qlQuery.simple("select id, text, created_at, epoch_min, `user`.name, `user`.screen_name, `user`.location, `user`.profile_image_url_https from tweets order by created_at desc limit 10;")
+                N1qlQuery.simple("select tag, count(*) as count from tweets where type='hashtag' group by tag order by count(*) desc limit 10")
         );
-
-        List<Tweet> resp = new ArrayList<>();
+        Map<String, Integer> hashtags = new LinkedHashMap<>();
         for (N1qlQueryRow row : result) {
-            Tweet tweet = new Tweet(
-                    row.value().getLong("id"),
-                    row.value().getString("text"),
-                    row.value().getString("created_at"),
-                    row.value().getLong("epoch_min"),
-                    row.value().getString("name"),
-                    row.value().getString("profile_image_url_https"));
-            resp.add(tweet);
+           hashtags.put(row.value().getString("tag"), row.value().getInt("count"));
         }
-        return resp;
+        return hashtags;
 
     }
+
 }

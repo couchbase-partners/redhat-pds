@@ -7,12 +7,16 @@ public class Tweet {
     private Long epochMin;
     private String text;
     private String createdAt;
+    private String name;
+    private String profileImg;
 
-    public Tweet(Long id, String text, String createdAt, Long epochMin) {
+    public Tweet(Long id, String text, String createdAt, Long epochMin, String name, String profileImg) {
         this.id = id;
         this.text = text;
         this.createdAt = createdAt;
         this.epochMin = epochMin;
+        this.name = name;
+        this.profileImg = profileImg;
     }
 
     public Tweet() {
@@ -50,4 +54,19 @@ public class Tweet {
         this.epochMin = epochMin;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
 }

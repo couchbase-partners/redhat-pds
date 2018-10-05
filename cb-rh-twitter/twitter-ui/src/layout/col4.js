@@ -8,18 +8,3 @@ class Col4 extends Component {
     }
 }
 export default Col4;
-
-/*
-curl -u admin:password123 -XPOST -H "Content-Type: application/json" \
-http://127.0.0.1:8094/api/index/tweets/query \
--d '{
-  "explain": false,
-  "fields": [
-    "entities.hashtags"
-  ],
-  "highlight": {},
-  "query": {
-    "query": "trump"
-  }
-}'
-*/
