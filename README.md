@@ -8,7 +8,7 @@ Related resources:
 
 - [Autonomous Operator Overview](https://docs.couchbase.com/operator/1.0/overview.html)
 - [Installing on OpenShift](https://docs.couchbase.com/operator/1.0/install-openshift.html)
-- TODO: insert link to RHPDS setup steps.
+- [Red Hat Partner Demo System](https://rhpds.redhat.com/)
 
 ## Summary
 
@@ -165,9 +165,11 @@ On the Pods page in OpenShift (https://master.couchbase.openshiftworkshop.com/co
 ![](img/os-cluster-basic.png)
 
 
-### Build and Deploy an App
+### Build and Deploy an App (Optional)
 
-In order to help demonstrate the Couchbase Autonomous Operator in action, we'll deploy an application that streams tweets in real-time from Twitter's APIs into Couchbase. In the next section, will intentionally kill a Couchbase node and observe how Couchbase and the app respond to this event.
+> Note: in order to follow this section, you will need a twitter developer account. If you do not have an account, please contact evan.pease@couchbase.com and I will provide temporary credentials.
+
+In order to help demonstrate the Couchbase Autonomous Operator in action, we'll deploy an application that streams tweets in real-time from Twitter's APIs into Couchbase. In the next section, we'll intentionally kill a Couchbase node and observe how Couchbase and the app respond to a node failure.
 
 First, import the `openjdk18-openshift` [https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html-single/red_hat_java_s2i_for_openshift/index](S2I) image. S2I will allow us to containerize and deploy an application on OpenShift without having to worry about writing a Dockerfile nor any YAML files!
 
