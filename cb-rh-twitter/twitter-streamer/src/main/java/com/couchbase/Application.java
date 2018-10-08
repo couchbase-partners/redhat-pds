@@ -1,5 +1,6 @@
 package com.couchbase;
 
+import com.couchbase.thing.MyClass;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -19,7 +20,12 @@ public class Application extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) {
+
+        MyClass thing = new MyClass();
+        thing.doTheThing();
+
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
+
     }
 
 }
