@@ -12,7 +12,9 @@ Related resources:
 
 ## Summary
 
-This guide is intended to be run with with Red Hat's [Product Demo System](https://www.redhat.com/en/partners/rhpds) for demos and workshops. It provides steps and examples for deploying Couchbase clusters using the Autonomous operator.
+This guide is intended to be run with with Red Hat's OpenShift Workshop on [RHPDS (Partner Demo System)](https://rhpds.redhat.com/) for demos and workshops. It provides steps and examples for deploying Couchbase clusters using the Autonomous operator.
+
+All of these steps can also be run on Minishift or any other supported OpenShift environment (tested on 3.10 and 3.11). Just replace the URL in the steps below with the address to your environment.
 
 # Setup
 

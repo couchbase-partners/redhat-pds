@@ -25,14 +25,14 @@ spec:
     - name: tweets
       type: memcached
       memoryQuota: 128
-      replicas: 2
+      replicas: 1
       ioPriority: high
       evictionPolicy: fullEviction
       conflictResolution: seqno
       enableFlush: true
       enableIndexReplica: true
   servers:
-    - size: 4
+    - size: 2
       name: all_services
       services:
         - data
