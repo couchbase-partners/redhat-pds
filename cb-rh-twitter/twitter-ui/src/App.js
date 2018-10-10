@@ -12,31 +12,35 @@ import Card from './layout/card.js'
 
 class App extends Component {
   render() {
+
+
+    const apiBase = 'http://localhost:8080';
+
     return (
       <div className="container-fluid container-cards-pf">
         <Row>
           <Col6>
             <Card title="Live Tweets">
-              <TweetStream></TweetStream>
+              <TweetStream apiBase={apiBase}></TweetStream>
             </Card>
           </Col6>
           <Col6>
             <Row>
             <Col6>
                 <Card title="Tweets Ingested">
-                 <TweetCountStat></TweetCountStat>
+                 <TweetCountStat apiBase={apiBase}></TweetCountStat>
                 </Card>
               </Col6>
               <Col6>
                 <Card title="Ingestion Rate">
-                 <TweetRateLineChart></TweetRateLineChart>
+                 <TweetRateLineChart apiBase={apiBase}></TweetRateLineChart>
                 </Card>
               </Col6>
             </Row>
             <Row>
               <Col12>
                 <Card title="Popular Hashtags">
-                  <HashTagBarChart></HashTagBarChart>
+                  <HashTagBarChart apiBase={apiBase}></HashTagBarChart>
                 </Card>
               </Col12>
              </Row>

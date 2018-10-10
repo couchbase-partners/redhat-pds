@@ -39,7 +39,7 @@ class TweetCountStat extends Component {
     }
 
     tick() {
-        fetch('http://localhost:8080/tweetcount')
+        fetch(this.props.apiBase + '/tweetcount')
         .then(res => res.json())
                 .then(
                     (result) => {

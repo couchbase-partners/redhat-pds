@@ -40,7 +40,7 @@ class HashTagBarChart extends Component {
     }
 
     tick() {
-        fetch('http://localhost:8080/hashtags')
+        fetch(this.props.apiBase + '/hashtags')
         .then(res => res.json())
                 .then(
                     (result) => {

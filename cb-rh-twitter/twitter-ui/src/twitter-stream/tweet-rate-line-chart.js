@@ -38,7 +38,7 @@ class TweetRateLineChart extends Component {
     }
 
     tick() {
-        fetch('http://localhost:8080/tweetrate')
+        fetch(this.props.apiBase + '/tweetrate')
         .then(res => res.json())
                 .then(
                     (result) => {

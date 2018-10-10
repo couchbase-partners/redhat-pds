@@ -24,7 +24,7 @@ class TweetStream extends Component {
     }
 
     tick() {
-        fetch('http://localhost:8080/tweets')
+        fetch(this.props.apiBase + '/tweets')
         .then(res => res.json())
                 .then(
                     (result) => {

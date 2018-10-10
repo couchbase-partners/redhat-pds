@@ -75,14 +75,23 @@ public class CouchbaseSink implements TweetSink {
         }
 
         JsonObject tweet = JsonObject.fromJson(msg);
+
         if (tweet.containsKey("id")) {
+
+            //only add needed field to tweetDoc
+            JsonObject tweetDoc = JsonObject.create();
+            tweetDoc.put("id", tweet.get("id"));
             long epochSecs = Instant.now().getEpochSecond();
             long epochMin = epochSecs / 60;
-            tweet.put("epoch_sec", epochSecs);
-            tweet.put("epoch_min", epochMin);
-            tweet.put("type","tweet");
+            tweetDoc.put("epoch_sec", epochSecs);
+            tweetDoc.put("epoch_min", epochMin);
+            tweetDoc.put("type","tweet");
+            tweetDoc.put("user", tweet.get("user"));
+            tweetDoc.put("text", tweet.get("text"));
+            tweetDoc.put("created_at", tweet.get("created_at"));
 
-            tweetBucket.upsert(JsonDocument.create(tweet.get("id").toString(), tweet));
+            //tweetBucket.upsert(JsonDocument.create(tweet.get("id").toString(), tweet));
+            tweetBucket.upsert(JsonDocument.create(tweet.get("id").toString(), tweetDoc));
 
 
             // add hash tag document
