@@ -181,7 +181,28 @@ First, import the `openjdk18-openshift` [https://access.redhat.com/documentation
 oc import-image registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift --confirm
 ```
 
-After importing this image, let's deploy a Twitter the streaming application:
+After importing this image, let's deploy a Twitter the API service first:
+
+```
+oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest~https://github.com/couchbase-partners/redhat-pds.git \
+       -e COUCHBASE_CLUSTER=cb-example \
+       -e COUCHBASE_USER=Administrator \
+       -e COUCHBASE_PASSWORD=password \
+       -e COUCHBASE_TWEET_BUCKET=tweets \
+       --context-dir=cb-rh-twitter/twitter-api \
+       --name=twitter-api
+```
+
+You can watch the build process by running `oc logs -f bc/twitter-api`. Once this is completed it will deploy a pod running the API service.
+
+Now let's expose the API service so it is accessible publicly:
+
+```
+oc expose svc twitter-api
+```
+
+This should create the expose a route to http://twitter-api-operator-example.apps.couchbase.openshiftworkshop.com. Visit this link. You should see a message "Welcome to the Twitter Analytics API!".
+
 
 ```
 oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest~https://github.com/couchbase-partners/redhat-pds.git \
