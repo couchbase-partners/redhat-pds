@@ -107,7 +107,10 @@ class TweetRateLineChart extends Component {
                     tick: {
                         //format: '%m-%d %H:%M'
                         format: '%H:%M'
-                    }
+                    },
+                },
+                y: {
+                    padding: {}
                 }
             }
             tooltip = {

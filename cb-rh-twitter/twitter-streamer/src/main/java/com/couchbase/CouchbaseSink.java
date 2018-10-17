@@ -101,7 +101,7 @@ public class CouchbaseSink implements TweetSink {
                 String text = (((JsonObject)hashtag).get("text")).toString();
 
                 JsonObject hashTagDoc = JsonObject.create();
-                hashTagDoc.put("tag", text);
+                hashTagDoc.put("tag", text.toLowerCase());
                 hashTagDoc.put("tweet_id", tweet.get("id").toString());
                 hashTagDoc.put("epoch_sec", epochSecs);
                 hashTagDoc.put("epoch_min", epochMin);

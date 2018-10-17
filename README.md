@@ -167,6 +167,8 @@ On the Pods page in OpenShift (https://master.couchbase.openshiftworkshop.com/co
 
 ### Build and Deploy an App (Optional)
 
+![](img/Microservice on Couchbase Ex1.png)
+
 > Note: in order to follow this section, you will need a twitter developer account. If you do not have an account, please contact evan.pease@couchbase.com and I will provide temporary credentials.
 
 In order to help demonstrate the Couchbase Autonomous Operator in action, we'll deploy an application that streams tweets in real-time from Twitter's APIs into Couchbase. In the next section, we'll intentionally kill a Couchbase node and observe how Couchbase and the app respond to a node failure.

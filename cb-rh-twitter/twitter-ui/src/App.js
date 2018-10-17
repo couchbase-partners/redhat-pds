@@ -13,8 +13,7 @@ import Card from './layout/card.js'
 class App extends Component {
   render() {
 
-
-    const apiBase = 'http://localhost:8080';
+    const apiBase = 'http://twitter-api-operator-example.apps.couchbase.openshiftworkshop.com';
 
     return (
       <div className="container-fluid container-cards-pf">
