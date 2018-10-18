@@ -165,7 +165,7 @@ On the Pods page in OpenShift (https://master.couchbase.openshiftworkshop.com/co
 ![](img/os-cluster-basic.png)
 
 
-### Build and Deploy an App (Optional)
+### Build and Deploy an App
 
 ![](img/couchbase-app-1.png)
 
@@ -173,15 +173,26 @@ On the Pods page in OpenShift (https://master.couchbase.openshiftworkshop.com/co
 
 In order to help demonstrate the Couchbase Autonomous Operator in action, we'll deploy a simple real-time analytics application that ingests tweets from Twitter's API into Couchbase. We will then simulate a node failure and observe how the application and Couchbase respond.
 
+The application is made up of 3 microservices:
+
+1. Tweet Ingester Service - The tweet ingester is a Java application that consumes tweet in real-time from Twitter's APIs into Couchbase.
+2. API Service - The API service is Java application that provides several REST end points for exposing data ingested by the Tweet Ingester Service. Under the hood, it is running SQL queries against Couchbase.
+3. UI Service - The UI service is a simple Node server that serves a React SPA (single page application). The UI provides visualizations of the data provided by the API Service.
+
 #### S2I Setup for Java Applications
 
-First, import the `openjdk18-openshift` [https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html-single/red_hat_java_s2i_for_openshift/index](S2I) image. S2I will allow us to containerize and deploy an application on OpenShift without having to worry about writing a Dockerfile nor any YAML files!
+First, import the `openjdk18-openshift` [https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html-single/red_hat_java_s2i_for_openshift/index](S2I) image. S2I will allow us to containerize and deploy an application on OpenShift without having to worry about writing a Dockerfile nor any yaml files!
 
 ```
 oc import-image registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift --confirm
 ```
 
-After importing this image, let's deploy a Twitter the API service first:
+After importing this image, we'll be able to deploy Java applications straight from source code using Open Shift's `new-app` command.
+
+
+#### Deploy the API Service
+
+First, we'll deploy the API service.
 
 ```
 oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest~https://github.com/couchbase-partners/redhat-pds.git \
@@ -201,8 +212,28 @@ Now let's expose the API service so it is accessible publicly:
 oc expose svc twitter-api
 ```
 
-This should create the expose a route to http://twitter-api-operator-example.apps.couchbase.openshiftworkshop.com. Visit this link. You should see a message "Welcome to the Twitter Analytics API!".
+This should create a route to http://twitter-api-operator-example.apps.couchbase.openshiftworkshop.com. Open this URL in your browser and you should see a message "Welcome to the Twitter Analytics API!".
 
+#### Deploy the UI Service
+
+Next, we'll deploy the UI service. This service is a simple node server serving up a ReactJS app. For expediency, a Docker image is already built. We can also deploy Docker images directly with the `new-app` command:
+
+```
+oc new-app ezeev/twitter-ui:latest
+```
+
+This will deploy our UI service. Let's expose it so we can access it:
+
+```
+oc expose svc oc expose svc twitter-ui
+```
+
+This should expose a route to http://twitter-ui-operator-example.apps.couchbase.openshiftworkshop.com. Visit this link. You should see a dashboard load **with empty charts**. We will start populating them in the next step.
+
+
+#### Deploy the Tweet Ingester Service
+
+Now that we have our API and UI deployed, we are ready to start ingesting and visualizing twitter data! This is a Java application like the API service, so we will deploy it the exact same way:
 
 ```
 oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest~https://github.com/couchbase-partners/redhat-pds.git \
@@ -219,9 +250,9 @@ oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:late
        --name=twitter-streamer
 ```
 
-The [oc new-app](https://docs.openshift.com/enterprise/3.1/dev_guide/new_app.html) command specifies the image source, the source code repository and directory to build from, and a number of environment variables required by our app. You can watch the build with `oc logs -f bc/cb-rh-twitter`. When this is completed you should see a new pod created for the twitter streamer.
+You can watch the build with `oc logs -f bc/cb-rh-twitter`. When this is completed you should see a new pod created for the twitter streamer.
 
-At this point you should also see new documents appearing in the tweets bucket.
+At this point you should also see new documents appearing in the tweets bucket in Couchbase, and in the UI at http://twitter-ui-operator-example.apps.couchbase.openshiftworkshop.com/.
 
 ### Failover Demo
 
