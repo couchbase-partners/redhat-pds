@@ -181,7 +181,7 @@ The application is made up of 3 microservices:
 
 #### S2I Setup for Java Applications
 
-First, import the `openjdk18-openshift` (S2I)[https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html-single/red_hat_java_s2i_for_openshift/index] image. S2I will allow us to containerize and deploy an application on OpenShift without having to worry about writing a Dockerfile nor any yaml files!
+First, import the `openjdk18-openshift` image.[S2I](https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html-single/red_hat_java_s2i_for_openshift/index) image. S2I will allow us to containerize and deploy an application on OpenShift without having to worry about writing a Dockerfile nor any yaml files!
 
 ```
 oc import-image registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift --confirm
