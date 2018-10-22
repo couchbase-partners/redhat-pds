@@ -314,5 +314,3 @@ oc create -f cluster-server-groups.yaml
 This deploys a 9 node cluster with ServerGroups enabled. The distribution of nodes is setup so that each zone has 2 Data nodes and 1 Query node. This allows us to keep 2 replicas of the default bucket in each zone.
 
 ![](img/9node-server-list.png)
-
-# Deploy an Application
