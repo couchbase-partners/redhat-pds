@@ -25,7 +25,7 @@ spec:
     - name: tweets
       type: couchbase
       memoryQuota: 128
-      replicas: 1
+      replicas: 2
       ioPriority: high
       evictionPolicy: fullEviction
       conflictResolution: seqno
@@ -38,6 +38,6 @@ spec:
         - data
         - index
         - query
-        - search
-        - eventing
+        #- search
+        #- eventing
         #- analytics

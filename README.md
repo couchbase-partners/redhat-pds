@@ -225,7 +225,7 @@ oc new-app ezeev/twitter-ui:latest
 This will deploy our UI service. Let's expose it so we can access it:
 
 ```
-oc expose svc oc expose svc twitter-ui
+oc expose svc twitter-ui
 ```
 
 This should expose a route to http://twitter-ui-operator-example.apps.couchbase.openshiftworkshop.com. Visit this link. You should see a dashboard load **with empty charts**. We will start populating them in the next step.
