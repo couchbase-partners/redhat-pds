@@ -14,7 +14,7 @@ Related resources:
 
 This guide is intended to be run with with Red Hat's OpenShift Workshop on [RHPDS (Partner Demo System)](https://rhpds.redhat.com/) for demos and workshops. It provides steps and examples for deploying Couchbase clusters using the Autonomous operator.
 
-All of these steps can also be run on Minishift or any other supported OpenShift environment (tested on 3.10 and 3.11). Just replace the URL in the steps below with the address to your environment.
+All of these steps can also be run on Minishift or any other supported OpenShift environment (tested on 3.10 and 3.11). Just replace the URLs in the steps below with the address to your environment. Throughout this guide you will see references to `CLUSTER_ID`. This ID is different each time a PDS cluster is created. Please reach out to partners@couchbase.com if you need access to a cluster, and a complete URL with `CLUSTER_ID` will be provided.
 
 # Setup
 
@@ -22,7 +22,7 @@ All of these steps can also be run on Minishift or any other supported OpenShift
 
 The first step is to login to OpenShift from your local browser AND terminal.
 
-Open https://master.couchbase.openshiftworkshop.com/login in your browser and login with **user1**'s credentials:
+Open https://master.couchbase-<CLUSTER_ID>.openshiftworkshop.com/login in your browser and login with **user1**'s credentials:
 
 - username: user1
 - password: openshift
@@ -31,7 +31,7 @@ Open https://master.couchbase.openshiftworkshop.com/login in your browser and lo
 Now we will login via terminal using **opentlc-mgr**'s credentials:
 
 ```
-oc login https://master.couchbase.openshiftworkshop.com
+oc login https://master.couchbase-<CLUSTER_ID>.openshiftworkshop.com
 ```
 
 - username: opentlc-mgr
@@ -149,7 +149,7 @@ Get the route to the Couchbase UI:
 ```
 oc get routes
 NAME            HOST/PORT                                                             PATH      SERVICES        PORT        TERMINATION   WILDCARD
-cb-example-ui   cb-example-ui-operator-example.apps.couchbase.openshiftworkshop.com             cb-example-ui   couchbase                 None
+cb-example-ui   cb-example-ui-operator-example.apps.couchbase-<CLUSTER_ID>.openshiftworkshop.com             cb-example-ui   couchbase                 None
 ```
 
 Open the URL outputted by `oc get routes` in your browser and login with:
@@ -160,7 +160,7 @@ Navigate to "Servers" to see the server list:
 
 ![Basic Couchbase Cluster](img/cb-cluster-basic.png)
 
-On the Pods page in OpenShift (https://master.couchbase.openshiftworkshop.com/console/project/operator-example/browse/pods):
+On the Pods page in OpenShift (https://master.couchbase-<CLUSTER_ID>.openshiftworkshop.com/console/project/operator-example/browse/pods):
 
 ![](img/os-cluster-basic.png)
 
@@ -228,7 +228,13 @@ This will deploy our UI service. Let's expose it so we can access it:
 oc expose svc twitter-ui
 ```
 
-This should expose a route to http://twitter-ui-operator-example.apps.couchbase.openshiftworkshop.com. Visit this link. You should see a dashboard load **with empty charts**. We will start populating them in the next step.
+This should expose a route to http://twitter-ui-operator-example.apps.couchbase-<CLUSTER_ID>.openshiftworkshop.com. Visit this link. You should see a dashboard load **with empty charts**. We will start populating them in the next step after deploying the Tweet Ingester Service.
+
+Now, add the following request parameter to the URL in your browser: `?apiBase=<exposed route to API service>`. The complete URL should look like:
+
+```
+http://twitter-ui-operator-example.apps.couchbase-<CLUSTER_ID>.openshiftworkshop.com?apiBase=http://twitter-api-operator-example.apps.couchbase-<CLUSTER_ID>.openshiftworkshop.com
+```
 
 
 #### Deploy the Tweet Ingester Service
@@ -252,7 +258,7 @@ oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:late
 
 You can watch the build with `oc logs -f bc/cb-rh-twitter`. When this is completed you should see a new pod created for the twitter streamer.
 
-At this point you should also see new documents appearing in the tweets bucket in Couchbase, and in the UI at http://twitter-ui-operator-example.apps.couchbase.openshiftworkshop.com/.
+At this point you should also see new documents appearing in the tweets bucket in Couchbase, and in the UI at http://twitter-ui-operator-example.apps.couchbase-<CLUSTER_ID>.openshiftworkshop.com/.
 
 ### Failover Demo
 

@@ -13,7 +13,13 @@ import Card from './layout/card.js'
 class App extends Component {
   render() {
 
-    const apiBase = 'http://twitter-api-operator-example.apps.couchbase-8c26.openshiftworkshop.com';
+    var apiBase = 'http://twitter-api-operator-example.apps.couchbase-9728.openshiftworkshop.com';
+
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("apiBase")) {
+      apiBase = urlParams.get("apiBase");
+    }
+    
     //const apiBase = 'http://twitter-api-operator-example.192.168.64.3.nip.io';
 
     return (

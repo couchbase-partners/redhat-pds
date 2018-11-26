@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import java.sql.Time;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class HashTagCountsAPIController {
@@ -55,14 +57,19 @@ public class HashTagCountsAPIController {
     @RequestMapping("/hashtags")
     public Map<String, Integer> tweets() {
         //query
-        N1qlQueryResult result = tweetBucket.query(
-                N1qlQuery.simple("select tag, count(*) as count from tweets where type='hashtag' group by tag order by count(*) desc limit 10")
-        );
-        Map<String, Integer> hashtags = new LinkedHashMap<>();
-        for (N1qlQueryRow row : result) {
-           hashtags.put(row.value().getString("tag"), row.value().getInt("count"));
+        try {
+            N1qlQueryResult result = tweetBucket.query(
+                    N1qlQuery.simple("select tag, count(*) as count from tweets where type='hashtag' group by tag order by count(*) desc limit 10"));
+
+            Map<String, Integer> hashtags = new LinkedHashMap<>();
+            for (N1qlQueryRow row : result) {
+                hashtags.put(row.value().getString("tag"), row.value().getInt("count"));
+            }
+            return hashtags;
+        } catch (Exception e) {
+
+            return null;
         }
-        return hashtags;
 
     }
 

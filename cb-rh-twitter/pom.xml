@@ -12,6 +12,7 @@
         <module>twitter-streamer</module>
         <module>twitter-api</module>
         <module>twitter-lib</module>
+        <module>twitter-producer</module>
     </modules>
 
 </project>
