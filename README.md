@@ -35,7 +35,7 @@ oc login https://master.couchbase-<CLUSTER_ID>.openshiftworkshop.com --insecure-
 ```
 
 
-> Note: opentlc-mgr is an admin account. Admin privileges are needed in order to install Custom Resource Definitions (CRDs).
+> Note: opentlc-mgr is a cluster admin account. Clustera dmin privileges are needed in order to install Custom Resource Definitions (CRDs). Cluster admin privileges are not required for subsequent steps.
 
 ### Create Project
 
@@ -47,11 +47,14 @@ oc new-project operator-example
 
 This command creates the `operator-example` project and switches to it.
 
-### Deploy the Operator CRD
+### Deploy the Operator Custom Resource Definition
 
 ```
 oc create -f crd.yaml
 ```
+
+The CRD extends the Kubernetes API on the cluster to support the Couchbase Operator. Read more about [Custom Resources](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
+
 
 ### Create Roles, Accounts & Bindings
 
@@ -71,11 +74,12 @@ oc create clusterrolebinding couchbasecluster --clusterrole couchbasecluster --u
 
 ```
 
+This creates the user, roles, and bindings that the Operator and Couchbase nodes run under.
+
+
 ### Create Red Hat Registry Secrets
 
 Before we can deploy the operator we need to specify credentials for pulling container images from Red Hat's registry and add them to the service accounts.
-
-Replace USERNAME and PASSWORD and EMAIL below with your Red Hat account info.
 
 ```
 oc create secret docker-registry rh-catalog --docker-server=registry.connect.redhat.com --docker-username=redcouch --docker-password=openshift --docker-email=redcouchredhat@gmail.com
@@ -83,7 +87,7 @@ oc create secret docker-registry rh-catalog --docker-server=registry.connect.red
 oc secrets add serviceaccount/couchbase-operator secrets/rh-catalog --for=pull
 oc secrets add serviceaccount/default secrets/rh-catalog --for=pull
 ```
-> Note the image will be pulled from the registry into you local repository. This can take a few minutes. 
+> Note the image will be pulled from the registry into the cluster's local repository. 
 
 ### Deploy the Operator
 
@@ -101,7 +105,7 @@ NAME                                  READY     STATUS    RESTARTS   AGE
 couchbase-operator-5bc785c54f-kh6c2   1/1       Running   0          22s
 ```
 
-**Do not proceed** to the next step until you see the `couchbase-operator` pod has status `RUNNING`. We use the `-w` option to watch the command, hit `ctrl + C` to escape.
+**Do not proceed** to the next step until you see the `couchbase-operator` pod has status `RUNNING`. You can use the `-w` flag to see status changes. Hit `ctrl + C` to escape.
 
 ### Deploy Couchbase Credentials Secret
 
