@@ -24,24 +24,23 @@ The first step is to login to OpenShift from your local browser AND terminal.
 
 Open https://master.couchbase-<CLUSTER_ID>.openshiftworkshop.com/login in your browser and login with **user1**'s credentials:
 
-- username: user1
-- password: openshift
-
-
-Now we will login via terminal using **opentlc-mgr**'s credentials:
-
-```
-oc login https://master.couchbase-<CLUSTER_ID>.openshiftworkshop.com
-```
-
 - username: opentlc-mgr
 - password: r3dh4t1!
+
+
+Now we will login via terminal using the same credentials:
+
+```
+oc login https://master.couchbase-<CLUSTER_ID>.openshiftworkshop.com --insecure-skip-tls-verify
+```
+
+
 
 > Note: opentlc-mgr is an admin account. Admin privileges are needed in order to install Custom Resource Definitions (CRDs).
 
 ### Create Project
 
-Next, we need to create a project for our work.
+Next, we need to create a project.
 
 ```
 oc new-project operator-example
