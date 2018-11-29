@@ -22,7 +22,7 @@ All of these steps can also be run on Minishift or any other supported OpenShift
 
 The first step is to login to OpenShift from your local browser AND terminal.
 
-Open https://master.couchbase-<CLUSTER_ID>.openshiftworkshop.com/login in your browser and login with **user1**'s credentials:
+Open https://master.couchbase-<CLUSTER_ID>.openshiftworkshop.com/login in your browser and login:
 
 - username: opentlc-mgr
 - password: r3dh4t1!
@@ -33,7 +33,6 @@ Now we will login via terminal using the same credentials:
 ```
 oc login https://master.couchbase-<CLUSTER_ID>.openshiftworkshop.com --insecure-skip-tls-verify
 ```
-
 
 
 > Note: opentlc-mgr is an admin account. Admin privileges are needed in order to install Custom Resource Definitions (CRDs).
