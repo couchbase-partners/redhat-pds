@@ -53,7 +53,10 @@ public class TweetsAPIController {
         tweetBucket = cluster.openBucket(bucketName);
 
         //create primary index, if it doesn't exist
-        tweetBucket.bucketManager().createN1qlPrimaryIndex(true, false);
+        //tweetBucket.bucketManager().createN1qlPrimaryIndex(true, false);
+        tweetBucket.query(
+                N1qlQuery.simple("CREATE PRIMARY INDEX `#primary` ON `tweets` WITH { \"num_replica\" : 2 }")
+        );
     }
 
 
