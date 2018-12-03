@@ -214,7 +214,7 @@ Now let's expose the API service so it is accessible publicly:
 oc expose svc twitter-api
 ```
 
-This should create a route to http://twitter-api-operator-example.apps.couchbase.openshiftworkshop.com. Open this URL in your browser and you should see a message "Welcome to the Twitter Analytics API!".
+This should create a route to http://twitter-api-operator-example.apps.couchbase-<CLUSTER_ID>.openshiftworkshop.com. Open the URL http://twitter-api-operator-example.apps.couchbase-<CLUSTER_ID>.openshiftworkshop.com/tweetcount in your browser and you should see a number 0 in your browser. This is a simple API endpoint that returns the number of tweets ingested.
 
 #### Deploy the UI Service
 
