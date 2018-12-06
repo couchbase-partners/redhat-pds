@@ -50,9 +50,14 @@ public class TweetCountAPIController {
 
         //create primary index, if it doesn't exist
         //tweetBucket.bucketManager().createN1qlPrimaryIndex(true, false);
-        tweetBucket.query(
-                N1qlQuery.simple("CREATE PRIMARY INDEX `#primary` ON `tweets` WITH { \"num_replica\" : 2 }")
-        );
+        try {
+            tweetBucket.query(
+                    N1qlQuery.simple("CREATE PRIMARY INDEX `#primary` ON `tweets` WITH { \"num_replica\" : 2 }")
+            );
+        } catch (Exception e) {
+            log.error("Error creating indexes! " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @CrossOrigin(origins = "*")
