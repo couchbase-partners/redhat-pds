@@ -258,7 +258,7 @@ oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:late
        --name=twitter-streamer
 ```
 
-You can watch the build with `oc logs -f bc/cb-rh-twitter`. When this is completed you should see a new pod created for the twitter streamer.
+You can watch the build with `oc logs -f bc/twitter-streamer`. When this is completed you should see a new pod created for the twitter streamer.
 
 At this point you should also see new documents appearing in the tweets bucket in Couchbase, and in the UI at http://twitter-ui-operator-example.apps.couchbase-<CLUSTER_ID>.openshiftworkshop.com/.
 

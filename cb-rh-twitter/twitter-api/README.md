@@ -11,3 +11,9 @@ oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:late
 oc delete dc twitter-api
 oc delete bc twitter-api
 oc delete svc twitter-api      
+
+
+# Kubernetes
+
+docker build -t ezeev/twitter-api:release-1.0 .
+docker push ezeev/twitter-api:release-1.0
