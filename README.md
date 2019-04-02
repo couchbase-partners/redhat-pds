@@ -197,7 +197,7 @@ After importing this image, we'll be able to deploy Java applications straight f
 First, we'll deploy the API service.
 
 ```
-oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest~https://github.com/couchbase-partners/redhat-pds.git#release-1.0 \
+oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest~https://github.com/couchbase-partners/redhat-pds.git#release-2.0 \
        -e COUCHBASE_CLUSTER=cb-example \
        -e COUCHBASE_USER=Administrator \
        -e COUCHBASE_PASSWORD=password \
@@ -244,7 +244,7 @@ http://twitter-ui-operator-example.apps.couchbase-<CLUSTER_ID>.openshiftworkshop
 Now that we have our API and UI deployed, we are ready to start ingesting and visualizing twitter data! This is a Java application like the API service, so we will deploy it the exact same way:
 
 ```
-oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest~https://github.com/couchbase-partners/redhat-pds.git#release-1.0 \
+oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest~https://github.com/couchbase-partners/redhat-pds.git#release-2.0 \
        -e TWITTER_CONSUMER_KEY=YOUR_CONSUMER_KEY \
        -e TWITTER_CONSUMER_SECRET=YOUR_CONSUMER_SECRET \
        -e TWITTER_TOKEN=YOUR_TOKEN \

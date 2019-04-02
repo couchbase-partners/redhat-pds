@@ -53,7 +53,7 @@ public class HashTagCountsAPIController {
         //tweetBucket.bucketManager().createN1qlPrimaryIndex(true, false);
         try {
             tweetBucket.query(
-                    N1qlQuery.simple("CREATE PRIMARY INDEX `#primary` ON `tweets`")
+                    N1qlQuery.simple("CREATE PRIMARY INDEX `#primary` ON `tweets` WITH { \"num_replica\" : 2 }")
             );
         } catch (Exception e) {
             log.error("Error creating indexes! " + e.getMessage());
