@@ -1,43 +1,87 @@
-apiVersion: couchbase.com/v1
+apiVersion: couchbase.com/v2
 kind: CouchbaseCluster
 metadata:
   name: cb-example
 spec:
-  baseImage: registry.connect.redhat.com/couchbase/server
-  version: 6.0.0-1
-  authSecret: cb-example-auth
-  exposeAdminConsole: true
-  adminConsoleServices:
-    - data
-  cluster:
-    dataServiceMemoryQuota: 256
-    indexServiceMemoryQuota: 512
-    searchServiceMemoryQuota: 256
-    eventingServiceMemoryQuota: 256
-    analyticsServiceMemoryQuota: 1024
-    indexStorageSetting: memory_optimized
-    autoFailoverTimeout: 10
-    autoFailoverMaxCount: 3
-    autoFailoverOnDataDiskIssues: true
-    autoFailoverOnDataDiskIssuesTimePeriod: 30
-    autoFailoverServerGroup: false
+  security:
+    adminSecret: cb-example-auth
+    rbac:
+      managed: true
+      selector:
+        matchLabels:
+          cluster: cb-example
   buckets:
-    - name: tweets
-      type: couchbase
-      memoryQuota: 128
-      replicas: 2
-      ioPriority: high
-      evictionPolicy: fullEviction
-      conflictResolution: seqno
-      enableFlush: true
-      enableIndexReplica: true
+    managed: true
+    selector:
+      matchLabels:
+        cluster: cb-example
   servers:
-    - size: 4
-      name: all_services
+    - size: 3
+      name: diq
       services:
         - data
         - index
         - query
-        #- search
-        #- eventing
-        #- analytics
+  networking:
+    adminConsoleServices:
+      - data
+    adminConsoleServiceType: NodePort
+    exposeAdminConsole: true
+    exposedFeatureServiceType: NodePort
+    exposedFeatures:
+      - xdcr
+      - client
+  cluster:
+    autoFailoverTimeout: 20s
+    autoFailoverOnDataDiskIssues: true
+    clusterName: cb-example
+    indexStorageSetting: memory_optimized
+    analyticsServiceMemoryQuota: 1Gi
+    eventingServiceMemoryQuota: 256Mi
+    searchServiceMemoryQuota: 256Mi
+    autoFailoverMaxCount: 3
+    dataServiceMemoryQuota: 256Mi
+    autoFailoverOnDataDiskIssuesTimePeriod: 120s
+    indexServiceMemoryQuota: 256Mi
+    autoCompaction:
+      databaseFragmentationThreshold:
+        percent: 30
+        size: 1Gi
+      parallelCompaction: false
+      timeWindow:
+        abortCompactionOutsideWindow: true
+        end: '06:00'
+        start: '02:00'
+      tombstonePurgeInterval: 72h
+      viewFragmentationThreshold:
+        percent: 30
+        size: 1Gi
+    autoFailoverServerGroup: false
+  xdcr:
+    managed: false
+    selector:
+      matchLabels:
+        cluster: cb-example
+  image: 'registry.connect.redhat.com/couchbase/server:6.6.5-1'
+  logRetentionTime: 604800s
+  logRetentionCount: 20
+status:
+  size: 0
+—-
+apiVersion: couchbase.com/v2
+kind: CouchbaseBucket
+metadata:
+  name: tweets
+  labels:
+    cluster: cb-example
+spec:
+  enableFlush: true
+  compressionMode: passive
+  enableIndexReplica: true
+  ioPriority: high
+  evictionPolicy: fullEviction
+  memoryQuota: 128Mi
+  replicas: 2
+  conflictResolution: seqno
+  type: couchbase
+status: {}
