@@ -7,7 +7,7 @@ The Couchbase Operator allows users to deploy Couchbase on OpenShift while signi
 Related resources:
 
 - [Autonomous Operator Overview](https://docs.couchbase.com/operator/current/overview.html)
-- [Installing on OpenShift][https://docs.couchbase.com/operator/current/install-openshift.html)
+- [Installing on OpenShift](https://docs.couchbase.com/operator/current/install-openshift.html)
 - [Red Hat Partner Demo System](https://rhpds.redhat.com/)
 
 ## Summary
